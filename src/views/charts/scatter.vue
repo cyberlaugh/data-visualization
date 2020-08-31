@@ -1,0 +1,57 @@
+<template>
+  <div>
+      <h3 style="margin-bottom:20px;">大数据量刷选测试</h3>
+      <button @click="showCharts">加载数据</button>
+      <hr>
+      <scatter ref='scatter' :trace-range="traceRange" :chart-data="chartdata" height="700px" />
+  </div>
+</template>
+
+<script>
+import axios from 'axios'
+import Scatter from '@/components/charts/scatter';
+export default {
+    name:'scatterView',
+    components:{
+        Scatter
+    },
+    data(){
+        return {
+            chartdata: [],
+            stepTrace: 10,
+            traceRange: [0,0] // 范围[leftIndex,rightIndex]
+        }
+    },
+    methods:{
+      showCharts(){
+        axios.get('data/house-price-area2.json').then(res=>{
+          this.chartdata = res.data
+        })
+        //   this.renderChart()
+      },
+      tracePoints(direction){
+        let left = this.traceRange[0]
+        let right = this.traceRange[1]
+        if(direction !== '-'){
+          right += (this.stepTrace)*1
+        }
+        if(direction !== '+'){
+          left += (this.stepTrace)*1
+        }
+        this.traceRange = [left,right]
+      },
+      clearPoints(){
+        this.traceRange = [0,0]
+      }
+    }
+}
+</script>
+
+<style lang="scss"  scoped>
+.region-rotatecontrol{
+    /deep/ .el-input{
+        width: 200px;
+        margin: 0 .5em;
+    }
+}
+</style>
