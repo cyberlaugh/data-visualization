@@ -4,7 +4,7 @@
  * @Autor: Luan Feng
  * @Date: 2020-08-31 11:47:03
  * @LastEditors: Luan Feng
- * @LastEditTime: 2020-09-01 10:16:12
+ * @LastEditTime: 2020-09-01 15:11:21
 -->
 <template>
   <div>
@@ -55,8 +55,6 @@ export default {
       options: null,
       loading: false,
       range: null,
-      tracingPoints: [],
-      tracingDataIndex: [], // [left,center,right]
       crntSelPoint: null,
       stepInfo: {
         size: 1, // 步长
