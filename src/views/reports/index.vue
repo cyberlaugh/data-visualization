@@ -10,7 +10,8 @@
             v-model="dateStart"
             type="date"
             value-format="yyyy-MM-dd"
-            size="small" />
+            size="small"
+          />
         </div>
         <div>结束时间</div>
         <div>
@@ -18,11 +19,14 @@
             v-model="dateEnd"
             type="date"
             value-format="yyyy-MM-dd"
-            size="small" />
+            size="small"
+          />
         </div>
       </div>
       <div class="btn-query">
-        <el-button type="primary">查询</el-button>
+        <el-button type="primary">
+          查询
+        </el-button>
       </div>
       <hr>
       <div class="tree-region">
@@ -33,33 +37,34 @@
           :props="{children:'children',label:'label'}"
           node-key="id"
           highlight-current
-          @node-click="treeRegionClicked"/>
+          @node-click="treeRegionClicked"
+        />
       </div>
     </section>
-    <div class="container-report">
+    <div v-loading="isloading" class="container-report">
       <div class="report-left">
         <div class="report-left-top">
           <div class="left-top-left">
-            <div class="base-info"/>
-            <div class="elec-level"/>
-            <div class="use-rate"/>
+            <card icon-class="el-icon-save" head-title="基础信息" :content="baseInfo" />
+            <div class="elec-level" />
+            <div class="use-rate" />
           </div>
-          <div v-loading="isloading" class="left-top-right map">
-            <province-map v-if="crntView && crntView.code" :province="crntView" @backToChina="backToChina"/>
-            <china-map v-else @drilldown="drilldown"/>
+          <div class="left-top-right map">
+            <province-map v-if="crntView && crntView.code" :province="crntView" @backToChina="backToChina" />
+            <china-map v-else @drilldown="drilldown" />
           </div>
         </div>
         <div class="report-left-bottom">
-          <div class="left-bottom-left"/>
-          <div class="left-bottom-center"/>
-          <div class="left-bottom-right"/>
+          <div class="left-bottom-left" />
+          <div class="left-bottom-center" />
+          <div class="left-bottom-right" />
         </div>
       </div>
       <div class="report-right">
-        <div/>
-        <div/>
-        <div/>
-        <div/>
+        <div />
+        <div />
+        <div />
+        <div />
       </div>
     </div>
   </div>
@@ -69,10 +74,12 @@
 
 import ChinaMap from '@/components/Charts/chinamap'
 import ProvinceMap from '@/components/Charts/chinamap/province.vue'
+import Card from './widgets/card.vue'
 export default {
   components: {
     ChinaMap,
-    ProvinceMap
+    ProvinceMap,
+    Card
   },
   data() {
     return {
@@ -80,7 +87,8 @@ export default {
       dateEnd: '',
       dataTreeRegion: [],
       isloading: true,
-      crntView: null // 中国、区域、场站
+      crntView: null, // 中国、区域、场站
+      baseInfo: null // 基础信息
     }
   },
   created() {
@@ -152,12 +160,25 @@ export default {
         id: '10'
       }]
     }]
+
+    // 获取基础信息
+    this.baseInfo = [{
+      name: '装机容量',
+      value: 150.38,
+      unit: 'ww'
+    }, {
+      name: '电站数量',
+      value: 30,
+      unit: '家'
+    }, {
+      name: '网站数量',
+      value: 1300,
+      unit: '台'
+    }]
   },
   mounted() {
     this.$refs.treeRegion.setCurrentKey('00')
-    setTimeout(() => {
-      this.isloading = false
-    }, 2000)
+    this.isloading = false
   },
   methods: {
     treeRegionClicked(node) {
